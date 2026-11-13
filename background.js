@@ -36,13 +36,20 @@ function setup(cfg) {
   chrome.alarms.create('morning', { when: t.getTime(), periodInMinutes: 1440 });
 }
 
-async function activeUrl() {
+async function activeUrls() {
+  const urls = [];
   try {
     const w = await chrome.windows.getLastFocused();
-    if (!w.focused) return '';
-    const [t] = await chrome.tabs.query({ active: true, windowId: w.id });
-    return (t && t.url) || '';
-  } catch { return ''; }
+    if (w.focused) {
+      const [t] = await chrome.tabs.query({ active: true, windowId: w.id });
+      if (t && t.url) urls.push(t.url);
+    }
+  } catch {}
+  try {
+    const audible = await chrome.tabs.query({ audible: true });
+    for (const t of audible) if (t.url) urls.push(t.url);
+  } catch {}
+  return urls;
 }
 
 async function tick() {
@@ -52,12 +59,12 @@ async function tick() {
   s.lastTick = now;
   const day = dayKey();
   s.days[day] = s.days[day] || {};
-  const url = await activeUrl();
+  const urls = await activeUrls();
   let force = false;
 
   for (const t of s.config.tasks) {
     const counting = t.mode === 'auto'
-      ? (t.urls || []).some(u => url.includes(u))
+      ? (t.urls || []).some(u => urls.some(x => x.includes(u)))
       : !!s.running[t.id];
     if (!counting) continue;
     const r = (s.days[day][t.id] = s.days[day][t.id] || { sec: 0 });
@@ -89,7 +96,7 @@ chrome.alarms.onAlarm.addListener(a => {
   if (a.name === 'morning') notify('Your time starts now', 'Academics, GATE, project, paper, LeetCode. Begin.');
 });
 chrome.tabs.onActivated.addListener(() => run(tick));
-chrome.tabs.onUpdated.addListener((_i, c) => { if (c.status === 'complete') run(tick); });
+chrome.tabs.onUpdated.addListener((_i, c) => { if (c.status === 'complete' || 'audible' in c) run(tick); });
 chrome.windows.onFocusChanged.addListener(() => run(tick));
 chrome.storage.onChanged.addListener(ch => { if (ch.config) setup(ch.config.newValue); });
 
