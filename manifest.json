@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Daily Tracker",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "browser_specific_settings": {
     "gecko": {
       "id": "daily-tracker@manya.local",
@@ -21,5 +21,9 @@
   },
   "icons": {
     "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
   }
 }

@@ -57,7 +57,7 @@ async function tick() {
   for (const t of s.config.tasks) {
     const counting = t.mode === 'auto'
       ? (t.urls || []).some(u => url.includes(u))
-      : false;
+      : !!s.running[t.id];
     if (!counting) continue;
     const r = (s.days[day][t.id] = s.days[day][t.id] || { sec: 0 });
     if (!r.started) { r.started = true; notify(`${t.name} started`, `Target: ${t.targetMin} min. Go.`); }
@@ -81,3 +81,21 @@ chrome.tabs.onActivated.addListener(() => run(tick));
 chrome.tabs.onUpdated.addListener((_i, c) => { if (c.status === 'complete') run(tick); });
 chrome.windows.onFocusChanged.addListener(() => run(tick));
 chrome.storage.onChanged.addListener(ch => { if (ch.config) setup(ch.config.newValue); });
+
+chrome.runtime.onMessage.addListener((m, _s, reply) => {
+  run(async () => {
+    if (m.type === 'toggle') {
+      await tick();
+      const s = await load();
+      if (s.running[m.id]) delete s.running[m.id];
+      else {
+        s.running = { [m.id]: true };
+        if (m.link) { s.links[m.id] = m.link; chrome.tabs.create({ url: m.link }); }
+      }
+      s.lastTick = Date.now();
+      await save(s);
+    }
+    reply(await load());
+  });
+  return true;
+});
