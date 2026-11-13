@@ -53,6 +53,7 @@ async function tick() {
   const day = dayKey();
   s.days[day] = s.days[day] || {};
   const url = await activeUrl();
+  let force = false;
 
   for (const t of s.config.tasks) {
     const counting = t.mode === 'auto'
@@ -63,11 +64,21 @@ async function tick() {
     if (!r.started) { r.started = true; notify(`${t.name} started`, `Target: ${t.targetMin} min. Go.`); }
     r.sec += dt;
     if (!r.done && r.sec >= t.targetMin * 60) {
-      r.done = true;
+      r.done = true; force = true;
       notify(`${t.name} target reached`, `${t.targetMin} min done. Extend if you can.`);
     }
   }
 
+  if (s.config.webhook && (force || now - s.lastSync > 300000)) {
+    s.lastSync = now;
+    const minutes = {};
+    for (const t of s.config.tasks) minutes[t.name] = Math.round(((s.days[day][t.id] || {}).sec || 0) / 60);
+    fetch(s.config.webhook, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ date: day, minutes })
+    }).catch(() => {});
+  }
   await save(s);
 }
 
