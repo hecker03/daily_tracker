@@ -1,0 +1,36 @@
+{
+  "startHour": 8,
+  "webhook": "",
+  "tasks": [
+    {
+      "id": "leetcode",
+      "name": "LeetCode",
+      "targetMin": 60,
+      "mode": "auto",
+      "urls": [
+        "leetcode.com"
+      ]
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "targetMin": 30,
+      "mode": "auto",
+      "urls": [
+        "github.com"
+      ]
+    },
+    {
+      "id": "study",
+      "name": "Study",
+      "targetMin": 120,
+      "mode": "manual"
+    },
+    {
+      "id": "assignments",
+      "name": "Assignments",
+      "targetMin": 60,
+      "mode": "manual"
+    }
+  ]
+}

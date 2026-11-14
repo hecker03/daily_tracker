@@ -2,14 +2,10 @@ const DEF = {
   startHour: 8,
   webhook: '',
   tasks: [
-    { id: 'academics', name: 'Academics', targetMin: 180, mode: 'manual' },
-    { id: 'gate', name: 'GATE', targetMin: 120, mode: 'auto', urls: [] },
-    { id: 'project', name: 'Project', targetMin: 60, mode: 'manual', noLink: true },
-    { id: 'paper', name: 'Research paper', targetMin: 60, mode: 'manual' },
     { id: 'leetcode', name: 'LeetCode', targetMin: 60, mode: 'auto', urls: ['leetcode.com'] },
-    { id: 'github', name: 'GitHub', targetMin: 10, mode: 'auto', urls: ['github.com'] },
-    { id: 'cyber', name: 'Cyber tool/concept', targetMin: 30, mode: 'manual' },
-    { id: 'apti', name: 'Aptitude', targetMin: 30, mode: 'manual' }
+    { id: 'github', name: 'GitHub', targetMin: 30, mode: 'auto', urls: ['github.com'] },
+    { id: 'study', name: 'Study', targetMin: 120, mode: 'manual' },
+    { id: 'assignments', name: 'Assignments', targetMin: 60, mode: 'manual' }
   ]
 };
 

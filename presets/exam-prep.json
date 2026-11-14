@@ -1,0 +1,53 @@
+{
+  "startHour": 8,
+  "webhook": "",
+  "tasks": [
+    {
+      "id": "academics",
+      "name": "Academics",
+      "targetMin": 180,
+      "mode": "manual"
+    },
+    {
+      "id": "exam",
+      "name": "Exam prep",
+      "targetMin": 120,
+      "mode": "auto",
+      "urls": []
+    },
+    {
+      "id": "project",
+      "name": "Project",
+      "targetMin": 60,
+      "mode": "manual",
+      "noLink": true
+    },
+    {
+      "id": "paper",
+      "name": "Research paper",
+      "targetMin": 60,
+      "mode": "manual"
+    },
+    {
+      "id": "leetcode",
+      "name": "LeetCode",
+      "targetMin": 60,
+      "mode": "auto",
+      "urls": [
+        "leetcode.com"
+      ]
+    },
+    {
+      "id": "aptitude",
+      "name": "Aptitude",
+      "targetMin": 30,
+      "mode": "manual"
+    },
+    {
+      "id": "concept",
+      "name": "Concept of the day",
+      "targetMin": 30,
+      "mode": "manual"
+    }
+  ]
+}
